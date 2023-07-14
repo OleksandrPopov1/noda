@@ -1,12 +1,10 @@
-const {ApiError} = require("../errors");
-const {NOT_FOUND, BAD_REQUEST, CREATE, NO_CONTENT} = require("../constants/statusCode.enum");
-const User = require("../database/User")
+const {CREATE, NO_CONTENT} = require("../constants/statusCode.enum");
 const {userService} = require("../services");
 
 module.exports = {
     getAllUsers: async (req, res, next) => {
         try {
-            const users = await User.find();
+            const users = await userService.getAllUsers();
             res.json(users);
         } catch (e) {
             next(e);
@@ -22,13 +20,7 @@ module.exports = {
     },
     getUserById: async (req, res, next) => {
         try {
-            const {userId} = req.params;
-
-            const user = await User.findById(userId);
-
-            if (!user) {
-                throw new ApiError('user not found', NOT_FOUND)
-            }
+            const {user} = req;
 
             res.json(user);
         } catch (e) {
